@@ -1,7 +1,8 @@
 import argparse
 from argparse import SUPPRESS
 import os.path
-from main import main
+import main
+import main_threaded
 
 parser = argparse.ArgumentParser(description = 'Flow-Based Image Abstraction',usage = SUPPRESS, epilog = "For more details visit https://github.com/ishan00/flow-based-image-abstraction")
 parser.add_argument('-f','--file', metavar = 'file_name', required = True, help = 'location of the image to convert')
@@ -9,6 +10,7 @@ parser.add_argument('--greyscale', action='store_true', help = 'to specify image
 parser.add_argument('--segmented', action='store_true', help = 'save segmented image')
 parser.add_argument('--edge', action='store_true', help = 'save edge image')
 parser.add_argument('--multi', action='store_true', help = 'generate multiple images with slightly tweaked parameters')
+parser.add_argument('--threading', action='store_true', help = 'Enable Threading')
 
 args = parser.parse_args()
 
@@ -26,5 +28,7 @@ flags = vars(args)
 del flags['file']
 
 #print (flags)
-
-main(input_path,output_path,vars(args))
+if args.threading:
+	main_threaded.main(input_path,output_path,vars(args))
+else:
+	main.main(input_path,output_path,vars(args))

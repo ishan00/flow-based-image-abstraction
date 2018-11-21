@@ -1,18 +1,18 @@
 import cv2
 import numpy as np
-from ETF import ETF
-from FDoG import FDoG, FDoG_iter
-from FBL import FBL
+import ETF
+import FDoG
+import FBL
 from utils import *
 import os
 import pickle
+import threading
 import time
 # from scipy.io import savemat
 
 def main(input_path, output_path, flags):
 
 	start = time.time()
-
 	name,ext = os.path.splitext(input_path)
 	name = name.split('/')[-1]
 
@@ -33,16 +33,12 @@ def main(input_path, output_path, flags):
 
 	else:
 		
-		time1 = time.time()
-		etf = ETF(gray_image, iterations = 1, mu = 5, type = 0)
-		time2 = time.time()
-
-		print ('ETF - ', time2 - time1)
-
+		etf = ETF.ETF(gray_image, iterations = 1, mu = 5, type = 0)
+		
 		with open('tmp/' + name + '_etf.pickle', 'wb') as file:
 			pickle.dump(etf,file)
 
-
+	t1_created = False
 	if os.path.isfile('tmp/' + name + '_edges.pickle'):
 		with open('tmp/' + name + '_edges.pickle', 'rb') as file:
 			edges = pickle.load(file)
@@ -53,17 +49,11 @@ def main(input_path, output_path, flags):
 			print("")
 
 	else:
-		
-		time1 = time.time()
-		edges = FDoG(gray_image, etf, iterations = 3, batch = True)
-		time2 = time.time()
+		t1_created = True
+		t1 = threading.Thread(target = FDoG.FDoG, args = (gray_image, etf, 3, True,))
+		t1.start()
 
-		print ('FDoG - ', time2 - time1)
-
-		with open('tmp/' + name + '_edges.pickle', 'wb') as file:
-			pickle.dump(edges,file)
-
-
+	t2_created = False
 	if os.path.isfile('tmp/' + name + '_smooth.pickle'):
 		with open('tmp/' + name + '_smooth.pickle', 'rb') as file:
 			smoothed_image = pickle.load(file)
@@ -74,15 +64,26 @@ def main(input_path, output_path, flags):
 			print("")
 
 	else:
+		t2_created = True
+		t2 = threading.Thread(target = FBL.FBL, args = (image, etf, 1,))
+		t2.start()
+	
+	if t1_created:
+		
+		t1.join()
+		with open('tmp/' + name + '_edges.pickle', 'wb') as file:
+			pickle.dump(FDoG.edges,file)
 
-		time1 = time.time()
-		smoothed_image = FBL(image, etf, iterations = 1)
-		time2 = time.time()
+		edges = FDoG.edges
+	
+	if t2_created:
 
-		print ('FBL - ',time2 - time1)
-
+		t2.join()
 		with open('tmp/' + name + '_smooth.pickle', 'wb') as file:
-			pickle.dump(smoothed_image,file)
+			pickle.dump(FBL.smoothed_image,file)
+
+		smoothed_image = FBL.smoothed_image
+
 
 	size = image.shape
 
@@ -97,5 +98,4 @@ def main(input_path, output_path, flags):
 
 	end = time.time()
 
-	print ('Total - ', end - start)
-
+	print ('Total - ',end - start)

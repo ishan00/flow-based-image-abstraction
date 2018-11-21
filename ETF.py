@@ -4,6 +4,7 @@ from numpy import linalg as LA
 #import lic_internal
 import pylab as plt
 import time
+from utils import *
 
 def ETF(gray_image, iterations, mu, type):
 	gray_image = np.divide(gray_image, 255.0)
@@ -23,12 +24,12 @@ def ETF(gray_image, iterations, mu, type):
 
 	for iteration in range(iterations):
 		start = time.time()
-		print('i',iteration)
 
 		if (type == 0):
 			tang_horz = np.zeros(size)
 
 			for h in range(size[0]):
+				print_progress('ETF Horiz',h,size[0])
 				for w in range(size[1]):
 					total_weight = 0.0
 					for j in range(max(0, w-mu), min(size[1], w+mu+1)):
@@ -40,7 +41,10 @@ def ETF(gray_image, iterations, mu, type):
 
 			tang = np.zeros(size)
 
+			print("")
+
 			for h in range(size[0]):
+				print_progress('ETF Vert',h,size[0])
 				for w in range(size[1]):
 					total_weight = 0.0
 					for i in range(max(0, h-mu), min(size[0], h+mu+1)):
@@ -49,6 +53,8 @@ def ETF(gray_image, iterations, mu, type):
 						tang[h][w] += tang_horz[i][w]*weight
 					if(total_weight != 0):
 						tang[h][w] /= total_weight
+
+			print("")
 
 		elif (type == 1):
 			tang_new = np.zeros(size)
@@ -69,7 +75,7 @@ def ETF(gray_image, iterations, mu, type):
 			tang = tang_new
 
 		end = time.time()
-		print(end-start,'seconds')
+		#print(end-start,'seconds')
 
 	tangnorm = LA.norm(tang, axis=2)
 	np.place(tangnorm, tangnorm == 0, [1])
