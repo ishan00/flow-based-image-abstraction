@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 import ETF
-import FDoG
-import FBL
+import FDoG_threaded
+import FBL_threaded
 from utils import *
 import os
 import pickle
@@ -50,7 +50,7 @@ def main(input_path, output_path, flags):
 
 	else:
 		t1_created = True
-		t1 = threading.Thread(target = FDoG.FDoG, args = (gray_image, etf, 3, True,))
+		t1 = threading.Thread(target = FDoG_threaded.FDoG, args = (gray_image, etf, 3, True,))
 		t1.start()
 
 	t2_created = False
@@ -65,24 +65,24 @@ def main(input_path, output_path, flags):
 
 	else:
 		t2_created = True
-		t2 = threading.Thread(target = FBL.FBL, args = (image, etf, 1,))
+		t2 = threading.Thread(target = FBL_threaded.FBL, args = (image, etf, 1,))
 		t2.start()
 	
 	if t1_created:
 		
 		t1.join()
 		with open('tmp/' + name + '_edges.pickle', 'wb') as file:
-			pickle.dump(FDoG.edges,file)
+			pickle.dump(FDoG_threaded.edges,file)
 
-		edges = FDoG.edges
+		edges = FDoG_threaded.edges
 	
 	if t2_created:
 
 		t2.join()
 		with open('tmp/' + name + '_smooth.pickle', 'wb') as file:
-			pickle.dump(FBL.smoothed_image,file)
+			pickle.dump(FBL_threaded.smoothed_image,file)
 
-		smoothed_image = FBL.smoothed_image
+		smoothed_image = FBL_threaded.smoothed_image
 
 
 	size = image.shape
