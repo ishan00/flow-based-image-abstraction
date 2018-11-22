@@ -54,7 +54,7 @@ def main(input_path, output_path, flags):
 	else:
 		
 		time1 = time.time()
-		edges = FDoG(gray_image, etf, iterations = 3, batch = True)
+		edges = FDoG(gray_image, etf, iterations = 1, batch = True)
 		time2 = time.time()
 
 		print ('FDoG - ', time2 - time1)
