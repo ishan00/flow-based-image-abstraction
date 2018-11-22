@@ -20,9 +20,11 @@ def FBL(image, etf, iterations = 1):
 				ang = angle(etf[h][w][0],etf[h][w][1])
 				pix = flow_neighbour(ang*180/np.pi)
 				for j in range(-5,6):
-					if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]: continue
-					H3[h][w] += H4[h+pix[0]*j][w+pix[1]*j]*gaussian(abs(j),sig_spatial)*intensity_weight(H4[h][w],H4[h+pix[0]*j][w+pix[1]*j],sig_intensity1)
-					total_weight += gaussian(abs(j),sig_spatial)*intensity_weight(H4[h][w],H4[h+pix[0]*j][w+pix[1]*j],sig_intensity1)
+					if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]:
+						continue
+					weight = gaussian(abs(j),sig_spatial)*intensity_weight(H4[h][w],H4[h+pix[0]*j][w+pix[1]*j],sig_intensity1)
+					H3[h][w] += H4[h+pix[0]*j][w+pix[1]*j]*weight
+					total_weight += weight
 					
 				H3[h][w] /= total_weight
 		
@@ -41,9 +43,11 @@ def FBL(image, etf, iterations = 1):
 					angle_perpendicular -= 2*np.pi
 				pix = flow_neighbour(angle_perpendicular*180/np.pi)
 				for j in range(-5,6):
-					if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]: continue
-					H4[h][w] += H3[h+pix[0]*j][w+pix[1]*j]*gaussian(abs(j),sig_spatial)*intensity_weight(H3[h][w],H3[h+pix[0]*j][w+pix[1]*j],sig_intensity2)
-					total_weight += gaussian(abs(j),sig_spatial)*intensity_weight(H3[h][w],H3[h+pix[0]*j][w+pix[1]*j],sig_intensity2)
+					if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]:
+						continue
+					weight = gaussian(abs(j),sig_spatial)*intensity_weight(H3[h][w],H3[h+pix[0]*j][w+pix[1]*j],sig_intensity2)
+					H4[h][w] += H3[h+pix[0]*j][w+pix[1]*j]*weight
+					total_weight += weight
 					
 				H4[h][w] /= total_weight
 

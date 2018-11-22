@@ -7,7 +7,6 @@ from utils import *
 import os
 import pickle
 import time
-# from scipy.io import savemat
 
 def main(input_path, output_path, flags):
 

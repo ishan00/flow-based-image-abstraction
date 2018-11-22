@@ -24,7 +24,8 @@ def FDoG_iter(image, etf):
 
 			for j in range(-3,4):
 
-				if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]: continue 
+				if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]:
+					continue 
 
 				H1[h][w] += H2[h+pix[0]*j][w+pix[1]*j]*dog_filter(abs(j),sigc,p)
 
@@ -45,12 +46,12 @@ def FDoG_iter(image, etf):
 
 			for j in range(-3,4):
 
-				if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]: continue
+				if h + pix[0]*j < 0 or h + pix[0]*j >= size[0] or w + pix[1]*j < 0 or w + pix[1]*j >= size[1]:
+					continue
 
-				H2[h][w] += H1[h+pix[0]*j][w+pix[1]*j]*gaussian(abs(j),sigm)
-				
-
-				total_weight += gaussian(j,sigm)
+				weight = gaussian(abs(j),sigm)
+				H2[h][w] += H1[h+pix[0]*j][w+pix[1]*j]*weight
+				total_weight += weight
 
 			H2[h][w] /= total_weight
 
