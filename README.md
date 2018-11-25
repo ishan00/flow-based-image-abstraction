@@ -2,7 +2,7 @@
 This repository is the implementation of the paper [Flow-Based Image Abstraction](http://www.cs.umsl.edu/~kang/Papers/kang_tvcg09.pdf) by Henry Kang, Seungyong Lee and Charles K. Chui.
 
 ### Running
-```python
+```
 python3 run.py --file FILE_PATH
 ```
 By default the program will generate 5 images with different amount of edges. The following flags can be used. 
