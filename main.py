@@ -10,6 +10,11 @@ import time
 
 def main(input_path, output_path, flags):
 
+	batch = flags['batch']
+	greyscale = flags['greyscale']
+
+	print (greyscale)
+
 	start = time.time()
 
 	name,ext = os.path.splitext(input_path)
@@ -85,7 +90,7 @@ def main(input_path, output_path, flags):
 
 	size = image.shape
 
-	images = color_segmentation(smoothed_image.astype(np.uint8), batch = False)
+	images = color_segmentation(smoothed_image.astype(np.uint8), batch, greyscale)
 
 	for j in range(len(edges)):
 		name,ext = os.path.splitext(input_path)
@@ -97,4 +102,3 @@ def main(input_path, output_path, flags):
 	end = time.time()
 
 	print ('Total - ', end - start)
-

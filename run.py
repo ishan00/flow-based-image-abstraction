@@ -9,7 +9,7 @@ parser.add_argument('-f','--file', metavar = 'file_name', required = True, help 
 parser.add_argument('--greyscale', action='store_true', help = 'to specify image is greyscale (default color)')
 parser.add_argument('--segmented', action='store_true', help = 'save segmented image')
 parser.add_argument('--edge', action='store_true', help = 'save edge image')
-parser.add_argument('--multi', action='store_true', help = 'generate multiple images with slightly tweaked parameters')
+parser.add_argument('--batch', action='store_true', help = 'generate multiple images with slightly tweaked parameters')
 parser.add_argument('--threading', action='store_true', help = 'Enable Threading')
 
 args = parser.parse_args()

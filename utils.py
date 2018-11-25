@@ -54,7 +54,7 @@ def intensity_weight(rgb1, rgb2, sigma):
 	I = np.dot(rgb1-rgb2,rgb1-rgb2)
 	return (1/np.sqrt(2*np.pi*sigma))*np.exp(-I**2/(2*sigma**2))
 
-def color_segmentation(image,batch = False):
+def color_segmentation(image,batch = False, greyscale = False):
 
 	image1 = cv2.cvtColor(image.astype(np.uint8),cv2.COLOR_BGR2LAB)
 
@@ -99,6 +99,10 @@ def color_segmentation(image,batch = False):
 				lum[h][w] = siz*(lum[h][w] // siz) + width + width*np.tanh(diff)
 
 		image1[:,:,0] = lum
+
+		if greyscale:
+			image1[:,:,1] = np.full((size[0],size[1]),127)
+			image1[:,:,2] = np.full((size[0],size[1]),127)
 
 		image2 = cv2.cvtColor(image1, cv2.COLOR_LAB2BGR)
 
