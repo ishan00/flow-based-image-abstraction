@@ -39,7 +39,7 @@ The left image is the original whereas the right image is the best looking among
 
 The following were created by running the above program on each frame of video and then merging them.
 
-<img style="width:100%" src="images/mrbean.gif">
+<img src="images/mrbean.gif" width="100%">
 
-<img style="width:100%" src="images/road.gif">
+<img src="images/road.gif" width="100%">
 
